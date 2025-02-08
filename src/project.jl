@@ -52,28 +52,10 @@ function generateProject(name::String, svd_path, parent_dir::String=pwd())
     end
     # write out the definitions
     # only create the new module file if this is a new project
-    !project_exists && open(mainModuleFile, "w") do io
-        print(io, """
-        module $moduleName
-
-        # This project was generated from the SVD file found under `src/SVD`.
-
-        #=
-        The following is the original license text of the SVD file.
-        Its license may not necessarily apply to this generated code.
-
-        """)
-        print(io, @something device.licenseText Some("No license text found!"))
-        print(io, """
-
-        =#
-
-        using MCUCommon: Register, Field
-
-        include("peripherals.jl")
-        
-        end # module""")
+    if project_exists
+        view(DeviceProject(device, moduleName), srcpath)
+    else
+        view(device, srcpath)
     end
-    generateJuliaDefinitions(srcpath, device)
     println("Done!")
 end

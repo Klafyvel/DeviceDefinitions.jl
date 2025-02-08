@@ -1,0 +1,5 @@
+@deprecate generateJuliaDefinitions(dir::String, d::Device) view(d, dir) 
+@deprecate generateJuliaDefinitions(io::IO, d::Device, basedir="") view(io, d, basedir)
+@deprecate generatePeripheralDefinition(p::Peripheral, path="") view(p, path) 
+@deprecate generateClusterDefinition(io::IO, c::Cluster, prefix::AbstractString, postfix::AbstractString, moduleHeader) view(io, c, prefix, postfix, moduleHeader) 
+@deprecate generateRegisterDefinition(io::IO, r::Register, prefix::AbstractString, postfix::AbstractString, moduleHeader) view(io, r, prefix, postfix, moduleHeader)
