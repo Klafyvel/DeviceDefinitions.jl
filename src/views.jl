@@ -12,7 +12,7 @@ Generate a module definition for the given element.
 """
 function view end
 
-function view(element::T, path::AbstractString="", args...) where T 
+function view(element, path::AbstractString="", args...)
     modulepath = joinpath(path, lowercase(string(element.name)) * ".jl")
     open(modulepath, "w") do io 
         view(io, element, args...)
@@ -20,7 +20,12 @@ function view(element::T, path::AbstractString="", args...) where T
     return modulepath
 end
 
+include("views/artifacts.jl")
 include("views/register.jl")
 include("views/cluster.jl")
 include("views/peripheral.jl")
 include("views/device.jl")
+include("views/pkgproject.jl")
+include("views/existingsvd.jl")
+include("views/localsvd.jl")
+include("views/main.jl")

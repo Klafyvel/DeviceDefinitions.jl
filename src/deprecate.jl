@@ -3,3 +3,4 @@
 @deprecate generatePeripheralDefinition(p::Peripheral, path="") view(p, path) 
 @deprecate generateClusterDefinition(io::IO, c::Cluster, prefix::AbstractString, postfix::AbstractString, moduleHeader) view(io, c, prefix, postfix, moduleHeader) 
 @deprecate generateRegisterDefinition(io::IO, r::Register, prefix::AbstractString, postfix::AbstractString, moduleHeader) view(io, r, prefix, postfix, moduleHeader)
+@deprecate generateProject(name::String, svd_path, parent_dir::String=pwd()) generate(name, svd_path; parentdir=parent_dir)

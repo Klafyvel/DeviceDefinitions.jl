@@ -8,13 +8,12 @@ using DocStringExtensions
 
 const TEMPLATES_DIRECTORY = Ref{String}(joinpath(dirname(dirname(pathof(DeviceDefinitions))), "templates"))
 
-
 import Pkg
 
 include("structs.jl")
 include("parsing.jl")
 include("views.jl")
+include("generate.jl")
 include("deprecate.jl")
-include("project.jl")
 
 end # module DeviceDefinitions

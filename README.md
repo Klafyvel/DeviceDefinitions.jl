@@ -16,7 +16,7 @@ code for compliance with your SVD. Please do report any bugs discovered through 
 
 ## API
 
-The main API of this package are `generateProject` and `readSVD`. Please check their respective docstrings for usage.
+The main API of this package are `generate` and `readSVD`. Please check their respective docstrings for usage.
 In addition to these, the structs `Device`, `Peripheral`, `Register`, `Field` and `CPU` are also considered API. Their fieldnames
 are inspired by the names from the SVD specification.
 

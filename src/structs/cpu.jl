@@ -1,7 +1,7 @@
 struct CPUName
     value::String
     function CPUName(s::AbstractString)
-        s ∉ cpunames && throw(ArgumentError("Unknown CPU name: `$s`"))
+        s ∉ cpunames && (@warn "Unknown CPU name: `$s`")
         new(s)
     end
 end
