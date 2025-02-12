@@ -1,6 +1,6 @@
 """
-    generate(name, url, filename; parentdir=pwd())
-    generate(name, path; parentdir=pwd())
+    generate(name, url, filename; parentdir=pwd(), kwargs...)
+    generate(name, path; parentdir=pwd(), kwargs...)
     generate(existingpath)
 
 Generate a Julia project from a SVD file. The project name will be set to `name` 
@@ -12,6 +12,13 @@ artifact, making the project lighter for your users.
 It is also possible to re-generate an existing project either if the generated 
 project path already exists, or even by only specifying `existingpath`. In this
 latter case, the SVD file is retrieved from the previously generated project.
+
+DeviceDefinitions.jl relies on PkgTemplates.jl for package generation (it comes 
+in the form of a plugin for PkgTemplates.jl). Calling `generate` will actually 
+create a template with the plugins listed in [`DEFAULT_PLUGINS`](@ref). `kwargs`
+will be passed to the template.
+
+See also [`DeviceDefinition`](@ref).
 """
 function generate end
 
@@ -34,58 +41,37 @@ function cleanuppreviousgeneration(dir)
     return nothing
 end
 
-function getdevice(strategy::LocalSVD, _, _)
-    return readSVD(strategy.svdpath)
+function generate(name::String, url::String, filename::String; parentdir::String=pwd(), kwargs...)
+    template = PkgTemplates.Template(;
+        dir = parentdir,
+        plugins = [DEFAULT_PLUGINS..., DeviceDefinition(filename, url)],
+        kwargs...
+    )
+    return template(name)
 end
-
-function getdevice(::ExistingSVD, projectdir, modulename)
-    julia = joinpath(Sys.BINDIR, Base.julia_exename())
-    cmd = `$julia -e "import $modulename; println($modulename.svdpath())"`
-    io = IOBuffer()
-    withenv("JULIA_PROJECT"=>projectdir) do 
-        run(pipeline(cmd, stdout=io))
-    end
-    path = chomp(String(take!(io)))
-    return readSVD(path)
+function generate(name::String, svdpath::String; parentdir::String=pwd(), kwargs...) 
+    template = PkgTemplates.Template(;
+        dir = parentdir,
+        plugins = [DEFAULT_PLUGINS..., DeviceDefinition(svdpath, nothing)],
+        kwargs...
+    )
+    return template(name)
 end
-
-function getdevice(strategy::ArtifactSVD, _, _)
-    return readSVD(strategy.downloadedsvdpath)
-end
-
-generate(name::String, url::String, filename::String; parentdir::String=pwd()) = generate(ArtifactSVD(url, filename, nothing, nothing, nothing), name, parentdir)
-generate(name::String, svdpath::String; parentdir::String=pwd()) = generate(LocalSVD(svdpath), name, parentdir)
 function generate(projectpath)
     correctprojectpath = endswith(projectpath, "/") ? projectpath[begin:end-1] : projectpath
-    return generate(ExistingSVD(), basename(correctprojectpath), dirname(correctprojectpath))
-end
-
-function generate(svdstrategy, name::String, parentdir::String=pwd())
-    hassuffix = endswith(name, ".jl")
-    projectname = hassuffix ? name : name*".jl"
-    modulename = hassuffix ? name[begin:end-3] : name
-    projectdir = joinpath(parentdir, projectname)
-    projectexists = isdir(projectdir)
-    srcpath = joinpath(projectdir, "src")
-    if projectexists
-        cleanuppreviousgeneration(projectdir)
-    else
-        cd(parentdir) do
-            Pkg.generate(projectname)
-        end
+    if !isdir(correctprojectpath)
+        template = PkgTemplates.Template(
+            dir = correctprojectpath,
+            plugins = [DEFAULT_PLUGINS..., DeviceDefinition(nothing, nothing)],
+            interactive=true
+        )
+        return template(name)
     end
-    # generate the project dir first, so there's no need to precompile all of the definitions
-    if !projectexists
-        view(PkgProject(), projectdir)
-    end
+    modulename = PkgTemplates.pkg_name(correctprojectpath)
+    cleanuppreviousgeneration(correctprojectpath)
     # Handle the svd file.
-    view(svdstrategy, projectdir)
-    device = getdevice(svdstrategy, projectdir, modulename)
-    # only create the new module file if this is a new project
-    if projectexists
-        view(device, srcpath)
-    else
-        view(DeviceProject(device, modulename, svdstrategy), srcpath)
-    end
-    @info "Done"
+    view(ExistingSVD(), correctprojectpath)
+    device = getdevice(ExistingSVD(), correctprojectpath, modulename)
+    srcpath = joinpath(correctprojectpath, "src")
+    return view(device, srcpath)
 end

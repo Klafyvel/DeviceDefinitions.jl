@@ -12,9 +12,6 @@ function view(project::PkgProject, dir::String)
     Pkg.compat("MCUCommon", "0.1.5")
     Pkg.compat("Pkg", "1")
     Pkg.compat("LazyArtifacts", "1")
-    open(joinpath(dir, ".gitignore"), "w") do io
-        println(io, "Manifest.toml")
-    end
     Pkg.activate(current_project)
     return nothing
 end

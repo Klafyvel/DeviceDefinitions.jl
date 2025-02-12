@@ -5,7 +5,7 @@ Definition of a register. It expects a context type `PeripheralDefinitionContext
 """
     {{ name }}
 
-{{ description }}
+{{{ description }}}
 """
 module {{ name }}
 

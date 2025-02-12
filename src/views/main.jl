@@ -16,9 +16,9 @@ struct DeviceProjectDefinitionContext
 end
 
 function view(project::DeviceProject, dir::String) 
-    mainmodulepath = joinpath(dir, project.name * ".jl")
+    mainmodulepath = joinpath(dir, "src", project.name * ".jl")
     return open(mainmodulepath, "w") do io
-        view(io, project, dir)
+        view(io, project, joinpath(dir, "src"))
     end
 end
 

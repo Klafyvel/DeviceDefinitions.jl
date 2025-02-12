@@ -12,6 +12,7 @@ mutable struct ArtifactSVD
     downloadedtarpath::Union{String,Nothing}
     downloadedsvdpath::Union{String,Nothing}
 end
+ArtifactSVD(url, filename) = ArtifactSVD(url, filename, nothing, nothing, nothing)
 
 function Base.getproperty(a::ArtifactSVD, name::Symbol)
     if name == :downloadedsvdpath 

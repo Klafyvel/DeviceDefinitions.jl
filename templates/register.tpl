@@ -5,7 +5,7 @@ Definition of a register. It expects a context type `RegisterDefinitionContext`.
 """
     {{ name }}
 
-{{ description }}
+{{{ description }}}
 """
 module {{ name }}Mod
 
@@ -25,7 +25,7 @@ const Reg = {{ prefix }}{{ name }}{{ postfix }}Struct
 """
     {{ name}}
 
-{{ description }}
+{{{ description }}}
 """
 {{ name }}
 {{/ fielddescriptions }}

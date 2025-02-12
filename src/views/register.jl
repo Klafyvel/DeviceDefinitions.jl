@@ -33,7 +33,7 @@ function view(io::IO, register::Register, prefix::AbstractString, postfix::Abstr
         isnothing(field.access) && throw(ArgumentError("Field `$(field.name)` in register `$(register.name)` doesn't have an access modifier!"))
         push!(fieldranges, Dict([
             "name"=>field.name, 
-            "length"=>length(field.bitRange) - (lastoffset+lastwidth), 
+            "length"=>length(field.bitRange), 
             "access"=>something(field.access, ReadWrite)
         ]))
         lastoffset = first(field.bitRange)

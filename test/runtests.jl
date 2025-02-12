@@ -13,7 +13,7 @@ using Tar, Inflate, Downloads
     @testset "Generate Basic Example" begin
         mktempdir() do path
             generationexpression = [
-                "generation" => :(DeviceDefinitions.generate("Example", $svdpath, parentdir=$path)),
+                "generation" => :(DeviceDefinitions.generate("Example.jl", $svdpath, parentdir=$path, user="test")),
                 "regeneration" => :(DeviceDefinitions.generate(joinpath($path, "Example.jl")))
             ]
             @testset "Testing $mtd." for (mtd,genexpr) in generationexpression
@@ -55,7 +55,7 @@ end
     device = DeviceDefinitions.readSVD(svdpath)
     mktempdir() do path
         generationexpression = [
-            "generation" => :(DeviceDefinitions.generate("Example", $url, $filename, parentdir=$path)),
+            "generation" => :(DeviceDefinitions.generate("Example.jl", $url, $filename, parentdir=$path, user="test")),
             "regeneration" => :(DeviceDefinitions.generate(joinpath($path, "Example.jl")))
         ]
         @testset "Testing $mtd." for (mtd,genexpr) in generationexpression
