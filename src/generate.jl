@@ -58,7 +58,8 @@ function generate(name::String, svdpath::String; parentdir::String=pwd(), kwargs
     return template(name)
 end
 function generate(projectpath)
-    correctprojectpath = endswith(projectpath, "/") ? projectpath[begin:end-1] : projectpath
+    correctprojectpath = expanduser(projectpath)
+    correctprojectpath = endswith(correctprojectpath, "/") ? correctprojectpath[begin:end-1] : correctprojectpath
     if !isdir(correctprojectpath)
         template = PkgTemplates.Template(
             dir = correctprojectpath,
