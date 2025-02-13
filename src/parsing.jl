@@ -639,7 +639,7 @@ function expandDimensions!(p::Union{Peripheral,Cluster})
                 no
             end
             splice!(col, idx:idx, nobjs)
-            idx += o.deg.dim.value + 1
+            idx += o.deg.dim.value
         end
     end
 end
@@ -662,6 +662,6 @@ function expandDimensions!(r::Register)
             nf
         end
         splice!(r.fields, idx:idx, nfields)
-        idx += f.deg.dim.value + 1
+        idx += f.deg.dim.value
     end
 end
