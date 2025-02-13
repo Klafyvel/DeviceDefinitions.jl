@@ -7,14 +7,14 @@ const PERIPHERAL_TEMPLATE = Ref{Mustache.MustacheTokens}(Mustache.load(PERIPHERA
 struct PeripheralDefinitionContext
     name::String
     description::String
-    baseaddress::UInt
+    baseaddress::String
 end
 
 function view(io::IO, peripheral::Peripheral)
     context = PeripheralDefinitionContext(
         peripheral.name,
         getoptionstring(peripheral, :description),
-        peripheral.baseAddress.value
+        "0x" * uppercase(string(peripheral.baseAddress.value, base=16, pad=16))
     )
     PERIPHERAL_TEMPLATE[](io, context)
     header = "using ..$(peripheral.name): baseAddress"
