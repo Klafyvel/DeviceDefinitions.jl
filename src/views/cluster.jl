@@ -14,7 +14,7 @@ end
 function view(io::IO, cluster::Cluster, prefix::AbstractString, postfix::AbstractString, header)
     context = ClusterDefinitionContext(
         cluster.name,
-        getoptionstring(cluster, :description),
+        escapedescription(getoptionstring(cluster, :description)),
         header,
         cluster.addressOffset
     )

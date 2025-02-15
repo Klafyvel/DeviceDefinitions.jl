@@ -52,7 +52,7 @@ function view(io::IO, register::Register, prefix::AbstractString, postfix::Abstr
         register.name,
         prefix,
         postfix,
-        getoptionstring(register, :description),
+        escapedescription(getoptionstring(register, :description)),
         header,
         register.addressOffset,
         fieldranges,

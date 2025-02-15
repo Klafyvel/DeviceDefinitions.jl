@@ -5,6 +5,12 @@ function getoptionstring(element::T, field) where T
     )
 end
 
+function escapedescription(description)
+    return replace(description,
+                   "\$" => "\\\$"
+                   )
+end
+
 """
     $(TYPEDSIGNATURES)
 

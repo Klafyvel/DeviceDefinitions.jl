@@ -13,7 +13,7 @@ end
 function view(io::IO, peripheral::Peripheral)
     context = PeripheralDefinitionContext(
         peripheral.name,
-        getoptionstring(peripheral, :description),
+        escapedescription(getoptionstring(peripheral, :description)),
         "0x" * uppercase(string(peripheral.baseAddress.value, base=16, pad=16))
     )
     PERIPHERAL_TEMPLATE[](io, context)
