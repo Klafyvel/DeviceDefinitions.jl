@@ -407,15 +407,15 @@ function readField(xml)
             deg = d[:deg]
 
             if tag(c) == "dim"
-                deg.name = SNNI(simplevalue(c))
+                deg.dim = SNNI(simplevalue(c))
             elseif tag(c) == "dimIncrement"
-                deg.name = SNNI(simplevalue(c))
+                deg.dimIncrement = SNNI(simplevalue(c))
             elseif tag(c) == "dimIndex"
-                deg.name = Some(DimIndex(simplevalue(c)))
+                deg.dimIndex = Some(DimIndex(simplevalue(c)))
             elseif tag(c) == "dimName"
-                deg.name = Some(Identifier(simplevalue(c)))
+                deg.dimName = Some(Identifier(simplevalue(c)))
             elseif tag(c) == "dimArrayIndex"
-                deg.name = Some(DimArrayIndex(simplevalue(c)))
+                deg.dimArrayIndex = Some(DimArrayIndex(simplevalue(c)))
             else
                 @warn "Unknown tag:" Thing=:DimElementGroup Tag=tag(c) Obj=d
             end
