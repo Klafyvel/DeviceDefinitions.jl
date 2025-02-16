@@ -653,9 +653,9 @@ function expandDimensions!(r::Register)
             idx += 1
             continue
         end
-        nfields = map(enumerate(r.deg)) do (num, repl)
+        nfields = map(enumerate(f.deg)) do (num, repl)
             nf = copy(f)
-            nf.name = replace(nf.name, r"%s|\[%s\]" => repl)
+            nf.name = DimableIdentifier(replace(nf.name.value, r"%s|\[%s\]" => repl))
             lsb = first(nf.bitRange) + (num-1)*f.deg.dimIncrement.value
             msb = lsb + length(nf.bitRange)
             nf.bitRange = BitRange(;lsb=string(lsb), msb=string(msb))
